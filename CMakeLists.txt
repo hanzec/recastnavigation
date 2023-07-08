@@ -1,5 +1,31 @@
 cmake_minimum_required(VERSION 3.1)
 
+###############################################################################
+## Prepare VCPKG ##############################################################
+###############################################################################
+# Fetch VCPKG and make it available
+message(STATUS "Fetching VCPKG...")
+include(FetchContent)
+FetchContent_Declare(
+        vcpkg
+        GIT_TAG 2022.11.14
+        GIT_REPOSITORY https://github.com/microsoft/vcpkg.git)
+FetchContent_MakeAvailable(vcpkg)
+
+# we only need releas build
+set(VCPKG_BUILD_TYPE release)
+
+# Add VCPKG to CMake
+set(CMAKE_TOOLCHAIN_FILE ${vcpkg_SOURCE_DIR}/scripts/buildsystems/vcpkg.cmake
+        CACHE STRING "CMake toolchain file")
+
+# setup include directories
+include_directories("${CMAKE_BINARY_DIR}/vcpkg_installed/${VCPKG_TARGET_TRIPLET}/include/")
+
+
+###############################################################################
+## Project Config #############################################################
+###############################################################################
 project(RecastNavigation)
 
 # lib versions
